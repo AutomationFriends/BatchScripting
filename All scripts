@@ -1,0 +1,18 @@
+TITLE -Run NUnit Selenium test-
+FOR /F "delims=" %%i IN ('dir "F:\FixedPriceRepair\FPRSeleniumTestOutput\FPRSeleniumTest" /b /ad-h /t:c /od') DO SET Source=%%i
+echo The Most recent folder: %Source%
+ECHO
+
+F:\FixedPriceRepair_TestAutomation\NUnit-3.2.1\bin\nunit3-console.exe F:\FixedPriceRepair\FPRSeleniumTestOutput\FPRSeleniumTest\%Source%\FPRSeleniumTest.dll --testlist=F:\FixedPriceRepair_TestAutomation\testlist.txt --trace=DEBUG --result:TestResult.xml
+
+TITLE -GenerateTestReport-
+F:\FixedPriceRepair_TestAutomation\NUnitOrange\nunitorange.exe "C:\Jenkins\workspace\TestResult.xml" "C:\Jenkins\workspace\TestResultNUnitReport.html"
+
+
+TITLE -DeployToTest
+FOR /F "delims=" %%i IN ('dir "\\sesoco2310\f$\FixedPriceRepair\FPRBuildOutput\FixedPriceRepair" /b /ad-h /t:c /od') DO SET Source=%%i
+echo The Most recent folder: %Source%
+ECHO
+XCOPY \\sesoco2310\f$\FixedPriceRepair\FPRBuildOutput\FixedPriceRepair\%Source%\_PublishedWebsites\FPRSite\* \\sesoco2310\f$\FixedPriceRepair\SiteRoot\Scania.Test.FPR\Site /s /i /y /EXCLUDE:\\sesoco2310\f$\FixedPriceRepair\Scripts\ExcludeList.txt
+ren \\sesoco2310\f$\FixedPriceRepair\SiteRoot\Scania.Test.FPR\Site\web.config web_.config
+ren \\sesoco2310\f$\FixedPriceRepair\SiteRoot\Scania.Test.FPR\Site\web_.config web.config
