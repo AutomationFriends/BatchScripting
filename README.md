@@ -1,2 +1,2 @@
 # BatchScripting
-batch commands new
+batch commands
